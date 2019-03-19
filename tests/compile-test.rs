@@ -1,7 +1,7 @@
 #![feature(test)]
 
 use compiletest_rs as compiletest;
-extern crate test;
+extern crate libtest;
 
 use std::env::{set_var, var};
 use std::ffi::OsStr;
@@ -74,7 +74,7 @@ fn run_mode(mode: &str, dir: PathBuf) {
     compiletest::run_tests(&cfg);
 }
 
-fn run_ui_toml_tests(config: &compiletest::Config, mut tests: Vec<test::TestDescAndFn>) -> Result<bool, io::Error> {
+fn run_ui_toml_tests(config: &compiletest::Config, mut tests: Vec<libtest::TestDescAndFn>) -> Result<bool, io::Error> {
     let mut result = true;
     let opts = compiletest::test_opts(config);
     for dir in fs::read_dir(&config.src_base)? {
@@ -103,7 +103,7 @@ fn run_ui_toml_tests(config: &compiletest::Config, mut tests: Vec<test::TestDesc
                 .iter()
                 .position(|test| test.desc.name == test_name)
                 .expect("The test should be in there");
-            result &= test::run_tests_console(&opts, vec![tests.swap_remove(index)])?;
+            result &= libtest::run_tests_console(&opts, vec![tests.swap_remove(index)])?;
         }
     }
     Ok(result)
